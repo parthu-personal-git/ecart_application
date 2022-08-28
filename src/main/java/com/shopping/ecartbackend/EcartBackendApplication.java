@@ -8,10 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
-//@ComponentScan(basePackages = "com.shopping.ecartbackend.service")
-//@EntityScan("com.shopping.ecartbackend.*")
-//@EnableJpaRepositories(basePackages = "com.shopping.ecartbackend.service")
-@ComponentScan("com.shopping.ecartbackend.controller")
 @SpringBootApplication
 public class EcartBackendApplication {
 

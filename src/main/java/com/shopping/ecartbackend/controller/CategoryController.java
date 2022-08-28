@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/shopping/category")
+@RequestMapping("/shopping/category")
 public class CategoryController {
 
     @Autowired

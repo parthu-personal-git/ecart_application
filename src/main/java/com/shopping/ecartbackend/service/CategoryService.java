@@ -25,8 +25,10 @@ public class CategoryService {
     }
 
     public Category getCategory(int categoryId){
-        Category category = categoryRepository.findById(categoryId).get();
+//        Category category = categoryRepository.findById(categoryId).get();
         //if it is empty : throw an exception : category not found
+//        Category category = categoryRepository.findByCategoryId(categoryId);
+        Category category = categoryRepository.findById(categoryId).get();
         return category;
     }
 

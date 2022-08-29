@@ -15,7 +15,6 @@ public class ApiResponse {
         return isSucces;
     }
 
-
     public String getMessage() {
         return message;
     }

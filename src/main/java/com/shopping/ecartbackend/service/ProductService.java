@@ -34,7 +34,6 @@ public class ProductService {
             logger.log(Level.WARNING, "no product found  with given id : findById service");
             throw new ProductNotFoundException(id);
         }
-
         //ProductModel productModel =convertProductToProductModel(product);
         logger.info("ending the : findById service");
         return product;

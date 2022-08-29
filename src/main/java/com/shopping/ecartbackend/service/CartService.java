@@ -5,6 +5,7 @@ import com.shopping.ecartbackend.domain.CartItem;
 import com.shopping.ecartbackend.domain.CartItemSingle;
 import com.shopping.ecartbackend.domain.CartModel;
 import com.shopping.ecartbackend.exception.CartNotFoundException;
+import com.shopping.ecartbackend.exception.ProductNotFoundException;
 import com.shopping.ecartbackend.model.Cart;
 import com.shopping.ecartbackend.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class CartService {
+
+    static Logger logger = Logger.getLogger(String.valueOf(CartService.class));
 
     @Autowired
     private ProductService productService;
@@ -25,45 +30,71 @@ public class CartService {
 
     public Cart addCart(CartModel cartModel){
         //get product by id
+        logger.info("starting the : addCart service");
         Product product = productService.findById(cartModel.getProductId());
+        //throw an exception here " product not found
+        if(product.getId() == 0 || product.getProductName() == null){
+            logger.log(Level.WARNING, "no product record found for the cart ");
+            throw new ProductNotFoundException(0);
+        }
         //once we get the valid product then set the cart properties
         Cart cart = new Cart();
         cart.setProduct(product);
         cart.setQuantity(cartModel.getQuantity());
         cart.setCreatedDate(new Date());
         cartRepository.save(cart);
+        logger.info("ending the : addCart service");
         //CartModel cartModelObject = convertCartToModel(cart);
         return  cart;
     }
 
     public Cart getCartById(int cartId){
+        logger.info("starting the : getCartById service");
         Cart cart = cartRepository.findById(cartId).get();
         //throw an exception if the cart is empty
         if(cart == null){
+            logger.log(Level.WARNING, "no cart record found for given id ");
             throw new CartNotFoundException(cartId);
         }
+        logger.info("ending the : getCartById service");
         return cart;
     }
 
     public Cart updateCartObject(int id, CartModel cartModel) {
-        Product product  = productService.findById(cartModel.getProductId());
-        Cart cart = new Cart();
+        logger.info("starting the  : updateCart Service");
+        Cart cart = cartRepository.findById(id).get();
+        Product product  = productService.findById(cart.getProduct().getId());
+        if(product.getId() == 0 || product.getProductName() == null){
+            logger.log(Level.WARNING, "no product record found for the cart ");
+            throw new ProductNotFoundException(0);
+        }
+
+//        Cart cart = new Cart();
+//        Cart cart = cartRepository.findById(id).get();
         //need to add updated date field in db as well as entity
         cart.setCreatedDate(new Date());
         cart.setProduct(product);
         cart.setQuantity(cartModel.getQuantity());
+        logger.info("ending the : updateCartObject");
         return  cart;
         //if cart
     }
 
     public void deleteCart(int id) {
+        logger.info("starting the  : deleteCartbyId Service");
         Cart cart = cartRepository.findById(id).get();
+        if(cart.getCartId() == 0 || cart.getCreatedDate() ==  null){
+            logger.log(Level.WARNING, "no product record found for the cart ");
+        }
         //throw an exception if not found
         cartRepository.deleteById(id);
+        logger.info("ending the  : deleteCartbyId Service");
     }
 
     public void deleteAllCartObjects() {
+        logger.info("starting the  : deleteAllCart Service");
         cartRepository.deleteAll();
+        logger.info("ending the  : deleteAllCart Service");
     }
 
     private CartModel convertCartToModel(Cart cart){

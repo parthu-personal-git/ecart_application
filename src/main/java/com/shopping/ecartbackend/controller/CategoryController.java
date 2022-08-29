@@ -1,5 +1,6 @@
 package com.shopping.ecartbackend.controller;
 
+import com.shopping.ecartbackend.common.ApiResponse;
 import com.shopping.ecartbackend.dao.CategoryRepository;
 import com.shopping.ecartbackend.domain.CategoryModel;
 import com.shopping.ecartbackend.model.Category;
@@ -22,10 +23,11 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+
     @PostMapping("/add")
-    public ResponseEntity<Category> addCategory(@RequestBody CategoryModel category){
+    public ResponseEntity<ApiResponse> addCategory(@RequestBody CategoryModel category){
         Category categoryObj = categoryService.addCategory(category);
-        return new ResponseEntity<>(categoryObj, HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(true,"category has been created"), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -41,23 +43,23 @@ public class CategoryController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable("id") int id,@RequestBody CategoryModel categoryModel){
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable("id") int id,@RequestBody CategoryModel categoryModel){
         Category category = categoryService.updateCategory(categoryModel,id);
-        return new ResponseEntity<>(category,HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"category has updated "),HttpStatus.OK);
 
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable("id") int id){
+    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable("id") int id){
         categoryService.deleteCategory(id);
-        return new ResponseEntity<>(new Category(),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"A category has deleted"),HttpStatus.OK);
     }
 
     //Not tested
     @DeleteMapping("/delete")
-    public ResponseEntity<List<Category>> deleteAllCategories(){
+    public ResponseEntity<ApiResponse> deleteAllCategories(){
         categoryService.deleteAllCategory();
-        return new ResponseEntity<>(new ArrayList<Category>(), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"All categories has been deleted"), HttpStatus.OK);
     }
 
 

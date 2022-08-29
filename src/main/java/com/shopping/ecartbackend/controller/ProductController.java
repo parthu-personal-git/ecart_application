@@ -1,5 +1,6 @@
 package com.shopping.ecartbackend.controller;
 
+import com.shopping.ecartbackend.common.ApiResponse;
 import com.shopping.ecartbackend.dao.CategoryRepository;
 import com.shopping.ecartbackend.domain.ProductModel;
 import com.shopping.ecartbackend.model.Product;
@@ -22,10 +23,10 @@ public class ProductController {
     private CategoryRepository categoryRepository;
 
     @PostMapping("/add")
-    public ResponseEntity<ProductModel> addProduct(@RequestBody ProductModel productModel){
+    public ResponseEntity<ApiResponse> addProduct(@RequestBody ProductModel productModel){
         ProductModel product = productService.addProduct(productModel);
         //if not found throw an exception that category doesn't exist
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"product has been created"), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -43,20 +44,20 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ProductModel> updateProduct(@PathVariable("id") int id, @RequestBody ProductModel productModel){
+    public ResponseEntity<ApiResponse> updateProduct(@PathVariable("id") int id, @RequestBody ProductModel productModel){
         ProductModel productModelObj = productService.updateProductObject(productModel,id);
-        return new ResponseEntity<>(productModelObj,HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"product has been updated"),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductModel> deleteProduct(@PathVariable("id") int id){
+    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") int id){
         ProductModel productModel = productService.deleteProductObject(id);
-        return new ResponseEntity<>(productModel, HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"A product has been deleted"), HttpStatus.OK);
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<ProductModel> deleteAllProducts(){
+    public ResponseEntity<ApiResponse> deleteAllProducts(){
         productService.deleteAllProductObjects();
-        return new ResponseEntity<>(new ProductModel(), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"All products have been deleted"), HttpStatus.OK);
     }
 }

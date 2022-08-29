@@ -1,5 +1,6 @@
 package com.shopping.ecartbackend.controller;
 
+import com.shopping.ecartbackend.common.ApiResponse;
 import com.shopping.ecartbackend.domain.CartItem;
 import com.shopping.ecartbackend.domain.CartModel;
 import com.shopping.ecartbackend.model.Cart;
@@ -26,9 +27,9 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestBody CartModel cartModel){
+    public ResponseEntity<ApiResponse> addToCart(@RequestBody CartModel cartModel){
         Cart cart = cartService.addCart(cartModel);
-        return new ResponseEntity<>(cart,HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(true,"cart has been created"),HttpStatus.CREATED);
     }
 
     @GetMapping("/cart/{id}")
@@ -38,22 +39,22 @@ public class CartController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Cart> updateCart(@PathVariable(value = "id") int id, @RequestBody  CartModel cartModel){
+    public ResponseEntity<ApiResponse> updateCart(@PathVariable(value = "id") int id, @RequestBody  CartModel cartModel){
         Cart cart = cartService.updateCartObject(id,cartModel);
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"cart has been updated has updated"), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Cart> deleteCart(@PathVariable(value = "id") int id){
+    public ResponseEntity<ApiResponse> deleteCart(@PathVariable(value = "id") int id){
         cartService.deleteCart(id);
-        return new ResponseEntity<>(new Cart(), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"A cart has been deleted"), HttpStatus.OK);
     }
 
     //not tested
     @DeleteMapping("/")
-    public ResponseEntity<List<Cart>> deleteAllCarts(){
+    public ResponseEntity<ApiResponse> deleteAllCarts(){
         cartService.deleteAllCartObjects();
-        return new ResponseEntity<>(new ArrayList<Cart>(), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true,"All carts has been deleted"), HttpStatus.OK);
     }
 
 

@@ -1,7 +1,6 @@
 package com.shopping.ecartbackend.dao;
 
 import com.shopping.ecartbackend.model.Cart;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

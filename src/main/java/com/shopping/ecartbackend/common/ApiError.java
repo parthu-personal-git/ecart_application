@@ -12,7 +12,7 @@ public class ApiError {
     private String errorMessage;
     private String debugMessage;
 
-    private ApiError(){
+    public ApiError(){
         currentTimestamp = LocalDateTime.now();
     }
     public ApiError(HttpStatus httpStatus){

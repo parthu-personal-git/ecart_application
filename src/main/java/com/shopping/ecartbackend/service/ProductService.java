@@ -4,10 +4,12 @@ import com.shopping.ecartbackend.dao.CategoryRepository;
 import com.shopping.ecartbackend.dao.ProductRepository;
 import com.shopping.ecartbackend.domain.ProductModel;
 import com.shopping.ecartbackend.exception.CategoryNotFoundException;
+import com.shopping.ecartbackend.exception.EmptyInputException;
 import com.shopping.ecartbackend.exception.ProductNotFoundException;
 import com.shopping.ecartbackend.model.Category;
 import com.shopping.ecartbackend.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,10 +32,10 @@ public class ProductService {
         logger.info("starting the : findById service");
         Product product = productRepository.findById(id).get();
         //if product is empty : Throw an exception product doesn't exist
-        if(product.getId() == 0 || product.getProductName() == null){
-            logger.log(Level.WARNING, "no product found  with given id : findById service");
-            throw new ProductNotFoundException(id);
-        }
+//        if(product.getId() == 0 || product.getProductName() == null){
+//            logger.log(Level.WARNING, "no product found  with given id : findById service");
+//            throw new ProductNotFoundException(id);
+//        }
         //ProductModel productModel =convertProductToProductModel(product);
         logger.info("ending the : findById service");
         return product;
@@ -41,6 +43,9 @@ public class ProductService {
 
     public ProductModel addProduct(ProductModel productModel) {
         logger.info("starting the : addProduct service");
+        if(productModel.getProductName() == null || productModel.getPrice() == 0){
+            throw new EmptyInputException("input fields are empty ", HttpStatus.BAD_REQUEST);
+        }
         Category category = categoryRepository.findById(productModel.getCategoryId()).get();
         //if this is empty : throw an exception that category doesn't exist
         Product product = new Product();

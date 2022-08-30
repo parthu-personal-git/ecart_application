@@ -5,10 +5,12 @@ import com.shopping.ecartbackend.domain.CartItem;
 import com.shopping.ecartbackend.domain.CartItemSingle;
 import com.shopping.ecartbackend.domain.CartModel;
 import com.shopping.ecartbackend.exception.CartNotFoundException;
+import com.shopping.ecartbackend.exception.EmptyInputException;
 import com.shopping.ecartbackend.exception.ProductNotFoundException;
 import com.shopping.ecartbackend.model.Cart;
 import com.shopping.ecartbackend.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,12 +33,17 @@ public class CartService {
     public Cart addCart(CartModel cartModel){
         //get product by id
         logger.info("starting the : addCart service");
+        if(cartModel.getProductId() == 0 || cartModel.getQuantity() == 0){
+            throw new EmptyInputException("input fields are empty ", HttpStatus.BAD_REQUEST);
+        }
         Product product = productService.findById(cartModel.getProductId());
         //throw an exception here " product not found
-        if(product.getId() == 0 || product.getProductName() == null){
-            logger.log(Level.WARNING, "no product record found for the cart ");
-            throw new ProductNotFoundException(0);
-        }
+//        if(product.getId() == 0 || product.getProductName() == null){
+//            logger.log(Level.WARNING, "no product record found for the cart ");
+//            throw new ProductNotFoundException(0);
+//        }
+
+
         //once we get the valid product then set the cart properties
         Cart cart = new Cart();
         cart.setProduct(product);

@@ -19,14 +19,20 @@ public class ApiError {
         this();
         this.httpStatusObject = httpStatus;
     }
-    ApiError(HttpStatus httpStatus, Throwable exception){
+
+    public ApiError(HttpStatus httpStatus, String message){
+        this();
+        this.httpStatusObject = httpStatus;
+        this.errorMessage = message;
+    }
+    public ApiError(HttpStatus httpStatus, Throwable exception){
         this();
         this.httpStatusObject = httpStatus;
         this.errorMessage = "Unexpected Error";
         this.debugMessage = exception.getLocalizedMessage();
     }
 
-    ApiError(HttpStatus httpStatus, String message, Throwable exception){
+    public ApiError(HttpStatus httpStatus, String message, Throwable exception){
         this();
         this.httpStatusObject = httpStatus;
         this.errorMessage = message;
@@ -39,6 +45,14 @@ public class ApiError {
 
     public void setErrorMessage(String errorMessage){
         this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage(){
+        return this.errorMessage;
+    }
+
+    public void setDebugMessage(String debugMessage){
+        this.debugMessage = debugMessage;
     }
 
 

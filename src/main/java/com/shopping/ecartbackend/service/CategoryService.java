@@ -4,11 +4,18 @@ import com.shopping.ecartbackend.dao.CategoryRepository;
 import com.shopping.ecartbackend.domain.CategoryModel;
 import com.shopping.ecartbackend.exception.CartNotFoundException;
 import com.shopping.ecartbackend.exception.CategoryNotFoundException;
+import com.shopping.ecartbackend.exception.EcartExceptionHandler;
+import com.shopping.ecartbackend.exception.EmptyInputException;
 import com.shopping.ecartbackend.model.Category;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,8 +28,15 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+
+    private EcartExceptionHandler ecartExceptionHandler = null;
+
     public Category addCategory(CategoryModel categoryModel){
         logger.info("starting the : addCategory service");
+        if(categoryModel.getCategoryName() == null || categoryModel.getImageURL() == null){
+            throw new EmptyInputException("input fields are empty ", HttpStatus.BAD_REQUEST);
+        }
+
         //check if the category already exists :  throw an exception if is already there
         Category category = new Category();
         category.setCategoryName(categoryModel.getCategoryName());
@@ -36,15 +50,20 @@ public class CategoryService {
     public Category getCategory(int categoryId){
 //        Category category = categoryRepository.findById(categoryId).get();
 //        Category category = categoryRepository.findByCategoryId(categoryId);
-        logger.info("starting the : getCategory service");
-        Category category = categoryRepository.findById(categoryId).get();
-        // //if it is empty : throw an exception : category not found
-        if(category.getCategoryId() == 0 || category.getCategoryName() == null){
-            logger.log(Level.WARNING, "no category found  with given id : getCategory service");
-            throw new CategoryNotFoundException(categoryId);
-        }
-        logger.info("ending the service : getCategory service");
-        return category;
+        //try {
+            logger.info("starting the : getCategory service");
+            Category category = categoryRepository.findById(categoryId).get();
+            // //if it is empty : throw an exception : category not found
+//            if (category.getCategoryId() == 0 || category.getCategoryName() == null) {
+//                logger.log(Level.WARNING, "no category found  with given id : getCategory service");
+//                throw new EmptyInputException("no cate");
+//            }
+            logger.info("ending the service : getCategory service");
+            return category;
+        //}
+
+
+        //return null;
     }
 
     public List<CategoryModel> getAllCategories(){

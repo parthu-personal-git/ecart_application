@@ -37,84 +37,119 @@ import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-
-//@RunWith(SpringJUnit4ClassRunner.class)
 
 @RunWith(MockitoJUnitRunner.class)
 public class CategoryControllerTest {
 
     @InjectMocks
-    CategoryController categoryController;
+    CategoryController categoryController = new CategoryController();
 
-    @MockBean
+    @Mock
     CategoryService categoryService;
 
     @Autowired
     private MockMvc mockMvc;
 
-//    @Autowired
-//    private Utility utility;
-
-//    @Before
-//    public void setup() {
-//        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
-//    }
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+    }
 
 
-//    @Test
-//    public void addCategory_returnCategoryObject() throws Exception {
-//        Category category = getCategory();
-//        String url = "/shopping/category/add/";
-//        String inputJson = utility.mapRequestToJson(category);
-//        String inputJson = mapRequestToJson(category);
-//        when(categoryService.addCategory(any(CategoryModel.class))).thenReturn(category);
-//        RequestBuilder requestBuilder = MockMvcRequestBuilders
-//                .post(url)
-//                .accept(MediaType.ALL).content(inputJson)
-//                .contentType(MediaType.ALL);
-//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-//        MockHttpServletResponse response = result.getResponse();
-//        String outputJson = response.getContentAsString();
-//        assertThat(outputJson).isEqualTo(inputJson);
-//        assertEquals(HttpStatus.OK.value(), response.getStatus());
-//        verify(category.getCategoryName().equals("description1"));
-//        ResponseEntity<ApiResponse> apiResponseResponseEntity = getApiResponse();
-        //when(categoryController.addCategory(any(CategoryModel.class))).thenReturn(apiResponseResponseEntity);
-//        verify(apiResponseResponseEntity.getStatusCode().toString().equals("HttpStatus.OK"));
-//    }
+    @Test
+    public void addCategory_returnCategoryObject() throws Exception {
+        Category category = getCategoryObject();
+        String url = "/shopping/category/add/";
+        String inputJson = mapRequestToJson(category);
+        when(categoryService.addCategory(any(CategoryModel.class))).thenReturn(category);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post(url)
+                .accept(MediaType.APPLICATION_JSON).content(inputJson)
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+        verify(categoryService,timeout(1)).addCategory(any(CategoryModel.class));
+    }
 
-//    @Test
-//    public void getAllCategories_returnAllCategories() throws Exception {
-//        ArrayList<Integer> arrayList = new ArrayList<>();
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders.get("/shopping/category/")
-//                ).andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().);
-//    }
+    @Test
+    public void getAllCategories_returnAllCategories() throws Exception {
+        ArrayList<CategoryModel> categories = (ArrayList<CategoryModel>) getListOfCategoryModels();
+        when(categoryService.getAllCategories()).thenReturn(categories);
+        mockMvc.perform(MockMvcRequestBuilders.get("/shopping/category/")).andExpect(status().isOk());
+        assertEquals(categories.size(),2);
+        assertEquals(categories.get(0).getCategoryName(),"category2");
+    }
 
     @Test
     public void getCategory_returnCategory() throws Exception {
-        Category category = getCategory();
+        Category category = getCategoryObject();
         when(categoryService.getCategory(anyInt())).thenReturn(category);
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/shopping/category/6"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.categoryName").value("category1"))
+                MockMvcRequestBuilders.get("/shopping/category/{id}",4))
                 .andExpect(status().isOk());
+        assertEquals(category.getCategoryName(),"category1");
+        assertEquals(category.getDescription(),"description1");
+
     }
+
+    @Test
+    public void updateCategory_returnReturnCategory() throws Exception {
+        Category category= getCategoryObject();
+        String url = "/shopping/category/update/{id}";
+        String inputJson = mapRequestToJson(category);
+        when(categoryService.updateCategory(any(CategoryModel.class),anyInt())).thenReturn(category);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put(url,3)
+                .accept(MediaType.APPLICATION_JSON).content(inputJson)
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        verify(categoryService,times(1)).updateCategory(any(CategoryModel.class),anyInt());
+
+    }
+
+    @Test
+    public void deleteCategory_shouldDeleteCategory() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/shopping/category/delete/{id}",4))
+                .andExpect(status().isOk());
+        verify(categoryService,times(1)).deleteCategory(anyInt());
+    }
+
+    @Test
+    public void deleteAllCategories_shouldDeleteAllCategories() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/shopping/category/delete"))
+                .andExpect(status().isOk());
+        verify(categoryService,times(1)).deleteAllCategory();
+    }
+
+
 
     public String mapRequestToJson(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(object);
     }
 
-    private Category getCategory(){
+    private List<CategoryModel> getListOfCategoryModels(){
+        List<CategoryModel> categoryModelList = new ArrayList<>();
+        CategoryModel category1 = getCategoryModel();
+        CategoryModel category2 = getCategoryModel();
+        categoryModelList.add(category1);
+        categoryModelList.add(category2);
+        return categoryModelList;
+    }
+
+    private Category getCategoryObject(){
         Category category = new Category();
         category.setCategoryName("category1");
         category.setCategoryId(1);
@@ -138,8 +173,5 @@ public class CategoryControllerTest {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 
     }
-
-
-
 
 }

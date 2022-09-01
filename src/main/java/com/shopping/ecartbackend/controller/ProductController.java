@@ -24,7 +24,7 @@ public class ProductController {
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody ProductModel productModel){
-        ProductModel product = productService.addProduct(productModel);
+        ProductModel productModelObject = productService.addProduct(productModel);
         //if not found throw an exception that category doesn't exist
         return new ResponseEntity<>(new ApiResponse(true,"product has been created"), HttpStatus.CREATED);
     }

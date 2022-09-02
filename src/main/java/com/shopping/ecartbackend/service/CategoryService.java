@@ -37,28 +37,17 @@ public class CategoryService {
         category.setCategoryName(categoryModel.getCategoryName());
         category.setDescription(categoryModel.getDescription());
         category.setImageURL(categoryModel.getImageURL());
-        categoryRepository.save(category);
+        //adding this line for testcase
+        Category categoryObject = categoryRepository.save(category);
         logger.info("ending the service : addCategory service");
         return category;
     }
 
     public Category getCategory(int categoryId){
-//        Category category = categoryRepository.findById(categoryId).get();
-//        Category category = categoryRepository.findByCategoryId(categoryId);
-        //try {
             logger.info("starting the : getCategory service");
             Category category = categoryRepository.findById(categoryId).get();
-            // //if it is empty : throw an exception : category not found
-//            if (category.getCategoryId() == 0 || category.getCategoryName() == null) {
-//                logger.log(Level.WARNING, "no category found  with given id : getCategory service");
-//                throw new EmptyInputException("no cate");
-//            }
             logger.info("ending the service : getCategory service");
             return category;
-        //}
-
-
-        //return null;
     }
 
     public List<CategoryModel> getAllCategories(){
@@ -80,11 +69,6 @@ public class CategoryService {
     public Category updateCategory(CategoryModel categoryModel,int id) {
         logger.info("starting the : updateCategory service");
         Category category = categoryRepository.findById(id).get();
-        //throw an exception if the category doesn't exist
-        if(category.getCategoryId() == 0 || category.getCategoryName() == null){
-            logger.log(Level.WARNING, "no category found  with given id : updateCategory service");
-            throw new CartNotFoundException(id);
-        }
         Category categoryObj = new Category();
         categoryObj.setCategoryId(id);
         categoryObj.setCategoryName(categoryModel.getCategoryName());
@@ -98,11 +82,6 @@ public class CategoryService {
     public void deleteCategory(int id) {
         logger.info("starting the : deleteCategory service");
         Category category = categoryRepository.findById(id).get();
-        //throw an exception if id doesn't exist
-        if(category.getCategoryId() == 0 || category.getCategoryName() == null){
-            logger.log(Level.WARNING, "no category found  with given id : deleteCategory service");
-            throw new CartNotFoundException(id);
-        }
         categoryRepository.deleteById(id);
         logger.info("ending the service : deleteCategory service");
     }

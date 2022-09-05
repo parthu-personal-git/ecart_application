@@ -10,7 +10,7 @@ public class CartItemSingle {
 
     public CartItemSingle(){};
     public CartItemSingle(Cart cart){
-        this.id = cart.getCartId();
+        this.id = cart.getId();
         this.quantity = cart.getQuantity();
         this.setProduct(cart.getProduct());
     }

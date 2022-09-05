@@ -1,19 +1,15 @@
 package com.shopping.ecartbackend.service;
 
-import com.shopping.ecartbackend.controller.CategoryController;
 import com.shopping.ecartbackend.dao.CategoryRepository;
 import com.shopping.ecartbackend.domain.CategoryModel;
 import com.shopping.ecartbackend.exception.EmptyInputException;
 import com.shopping.ecartbackend.model.Category;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,8 +42,6 @@ public class CategoryServiceTest {
         mockMvc = MockMvcBuilders.standaloneSetup(categoryService).build();
     }
 
-
-
     @Test
     public void addCategory_returnsCategory(){
         Category category = getCategoryObject();
@@ -72,15 +66,6 @@ public class CategoryServiceTest {
         categoryService.getCategory(anyInt());
         assertEquals(category.getCategoryName(),"category1");
     }
-
-
-    //handle this exception later
-//    @Test(expected = NoSuchElementException.class)
-//    public void getCategory_throwsEntityNotFoundException() {
-//        Category category = getEmptyCategory();
-//        when(categoryRepository.findById(anyInt())).thenThrow(new NoSuchElementException());
-//
-//    }
 
     @Test
     public void getAllCategories_returnsAllCategories(){
@@ -130,8 +115,6 @@ public class CategoryServiceTest {
         verify(categoryRepository,times(1)).deleteAll();
     }
 
-
-
     private List<Category> getListOfCategories(){
         List<Category> categoryList = new ArrayList<>();
         categoryList.add(getCategoryObject());
@@ -168,10 +151,4 @@ public class CategoryServiceTest {
         category.setImageURL("www.imageurl.com");
         return category;
     }
-
-
-
-
-
-
 }

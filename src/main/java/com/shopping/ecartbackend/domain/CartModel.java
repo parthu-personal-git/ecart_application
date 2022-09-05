@@ -14,6 +14,10 @@ public class CartModel implements Serializable {
     @JsonProperty("quantity")
     private int quantity;
 
+//    @JsonProperty("user_id")
+//    private int userId;
+
+
     private Date createdDate;
 
     public CartModel(){};
@@ -53,4 +57,11 @@ public class CartModel implements Serializable {
         this.quantity = quantity;
     }
 
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 }

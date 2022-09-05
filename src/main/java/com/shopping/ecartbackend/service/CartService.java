@@ -1,6 +1,7 @@
 package com.shopping.ecartbackend.service;
 
 import com.shopping.ecartbackend.dao.CartRepository;
+import com.shopping.ecartbackend.dao.UserRepository;
 import com.shopping.ecartbackend.domain.CartItem;
 import com.shopping.ecartbackend.domain.CartItemSingle;
 import com.shopping.ecartbackend.domain.CartModel;
@@ -28,7 +29,13 @@ public class CartService {
     private ProductService productService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public Cart addCart(CartModel cartModel){
         //get product by id
@@ -37,6 +44,8 @@ public class CartService {
             throw new EmptyInputException("input fields are empty ", HttpStatus.BAD_REQUEST);
         }
         Product product = productService.findById(cartModel.getProductId());
+//        User user = userService.getUserById(cartModel.getUserId());
+//        userRepository.findBy(1);
         //throw an exception here " product not found
 //        if(product.getId() == 0 || product.getProductName() == null){
 //            logger.log(Level.WARNING, "no product record found for the cart ");
@@ -49,6 +58,7 @@ public class CartService {
         cart.setProduct(product);
         cart.setQuantity(cartModel.getQuantity());
         cart.setCreatedDate(new Date());
+//        cart.setUser(user);
         cartRepository.save(cart);
         logger.info("ending the : addCart service");
         //CartModel cartModelObject = convertCartToModel(cart);
@@ -71,6 +81,7 @@ public class CartService {
         logger.info("starting the  : updateCart Service");
         Cart cart = cartRepository.findById(id).get();
         Product product  = productService.findById(cart.getProduct().getId());
+//        User user = userService.getUserById(cartModel.getUserId());
         if(product.getId() == 0 || product.getProductName() == null){
             logger.log(Level.WARNING, "no product record found for the cart ");
             throw new ProductNotFoundException(0);
@@ -82,6 +93,8 @@ public class CartService {
         cart.setCreatedDate(new Date());
         cart.setProduct(product);
         cart.setQuantity(cartModel.getQuantity());
+//        cart.setUser(user);
+        cartRepository.save(cart);
         logger.info("ending the : updateCartObject");
         return  cart;
         //if cart
@@ -90,7 +103,7 @@ public class CartService {
     public void deleteCart(int id) {
         logger.info("starting the  : deleteCartbyId Service");
         Cart cart = cartRepository.findById(id).get();
-        if(cart.getCartId() == 0 || cart.getCreatedDate() ==  null){
+        if(cart.getId() == 0 || cart.getCreatedDate() ==  null){
             logger.log(Level.WARNING, "no product record found for the cart ");
         }
         //throw an exception if not found
@@ -107,9 +120,10 @@ public class CartService {
     private CartModel convertCartToModel(Cart cart){
         CartModel cartModel = new CartModel();
         cartModel.setCreatedDate(cart.getCreatedDate());
-        cartModel.setId(cart.getCartId());
+        cartModel.setId(cart.getId());
         cartModel.setProductId(cart.getProduct().getId());
         cartModel.setQuantity(cart.getQuantity());
+//        cartModel.setUserId(cart.getUser().getUserId());
         return cartModel;
     }
 

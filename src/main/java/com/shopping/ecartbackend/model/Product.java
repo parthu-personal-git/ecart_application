@@ -9,7 +9,9 @@ import javax.persistence.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     int id;
+
     @Column(name = "product_name")
     String productName;
     @Column(name = "image_url")

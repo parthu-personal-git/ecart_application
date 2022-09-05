@@ -2,16 +2,13 @@ package com.shopping.ecartbackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.ecartbackend.common.Utility;
 import com.shopping.ecartbackend.domain.CartItem;
 import com.shopping.ecartbackend.domain.CartItemSingle;
 import com.shopping.ecartbackend.domain.CartModel;
-import com.shopping.ecartbackend.domain.ProductModel;
 import com.shopping.ecartbackend.model.Cart;
 import com.shopping.ecartbackend.model.Category;
 import com.shopping.ecartbackend.model.Product;
 import com.shopping.ecartbackend.service.CartService;
-import com.shopping.ecartbackend.service.ProductService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +25,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +68,7 @@ public class CartControllerTest {
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/shopping/carts/cart/{id}",4))
                 .andExpect(status().isOk());
-        assertEquals(cart.getCartId(),1);
+        assertEquals(cart.getId(),1);
         assertEquals(cart.getQuantity(),1);
     }
 
@@ -129,7 +125,7 @@ public class CartControllerTest {
 
     private Cart getCartObject(){
         Cart cart = new Cart();
-        cart.setCartId(1);
+        cart.setId(1);
         cart.setProduct(getProduct());
         cart.setCreatedDate(new Date());
         cart.setQuantity(1);

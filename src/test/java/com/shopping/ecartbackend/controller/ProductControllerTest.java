@@ -2,11 +2,9 @@ package com.shopping.ecartbackend.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopping.ecartbackend.domain.CategoryModel;
 import com.shopping.ecartbackend.domain.ProductModel;
 import com.shopping.ecartbackend.model.Category;
 import com.shopping.ecartbackend.model.Product;
-import com.shopping.ecartbackend.service.CategoryService;
 import com.shopping.ecartbackend.common.Utility;
 import com.shopping.ecartbackend.service.ProductService;
 import org.junit.Before;

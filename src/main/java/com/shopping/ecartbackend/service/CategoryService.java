@@ -2,7 +2,6 @@ package com.shopping.ecartbackend.service;
 
 import com.shopping.ecartbackend.dao.CategoryRepository;
 import com.shopping.ecartbackend.domain.CategoryModel;
-import com.shopping.ecartbackend.exception.CartNotFoundException;
 import com.shopping.ecartbackend.exception.EcartExceptionHandler;
 import com.shopping.ecartbackend.exception.EmptyInputException;
 import com.shopping.ecartbackend.model.Category;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service

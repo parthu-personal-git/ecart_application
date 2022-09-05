@@ -1,31 +1,35 @@
 package com.shopping.ecartbackend.model;
 
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "cart")
-public class Cart implements Serializable {
-
+@Table(name = "`order`")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id")
+    @Column(name = "id")
     int id;
+
+    @Column(name = "order_number")
+    int orderNumber;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name="created_date")
     Date createdDate;
+
     @Column(name = "quantity")
     int quantity;
 
-    public Cart(){};
+    @Column(name = "price")
+    double price;
 
     public int getId() {
         return id;
@@ -35,13 +39,13 @@ public class Cart implements Serializable {
         this.id = id;
     }
 
-//    public int getCartId() {
-//        return cartId;
-//    }
-//
-//    public void setCartId(int cartId) {
-//        this.cartId = cartId;
-//    }
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     public Product getProduct() {
         return product;
@@ -51,13 +55,13 @@ public class Cart implements Serializable {
         this.product = product;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Date getCreatedDate() {
         return createdDate;
@@ -73,5 +77,13 @@ public class Cart implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

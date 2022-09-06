@@ -38,7 +38,7 @@ public class OrderController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateOrder(@PathVariable("id") int id, @RequestBody OrderModel orderModel){
-        Order order = orderService.updateUpdateById(id,orderModel);
+        Order order = orderService.updateOrderById(id,orderModel);
         return new ResponseEntity<>(new ApiResponse(true,"order has been updated"), HttpStatus.OK);
 
     }

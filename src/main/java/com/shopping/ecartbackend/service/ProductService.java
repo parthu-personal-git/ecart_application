@@ -29,7 +29,7 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
     public Product findById(int id) {
-        logger.info("starting the : findById service");
+        logger.info("starting the ProductService:findById service");
         Product product = productRepository.findById(id).get();
         //if product is empty : Throw an exception product doesn't exist
 //        if(product.getId() == 0 || product.getProductName() == null){
@@ -37,12 +37,12 @@ public class ProductService {
 //            throw new ProductNotFoundException(id);
 //        }
         //ProductModel productModel =convertProductToProductModel(product);
-        logger.info("ending the : findById service");
+        logger.info("ending the ProductService:findById service");
         return product;
     }
 
     public ProductModel addProduct(ProductModel productModel) {
-        logger.info("starting the : addProduct service");
+        logger.info("starting the ProductService:addProduct service");
         if(productModel.getProductName() == null || productModel.getPrice() == 0){
             throw new EmptyInputException("input fields are empty ", HttpStatus.BAD_REQUEST);
         }
@@ -57,24 +57,24 @@ public class ProductService {
         productRepository.save(product);
         //since product has Category has entity, we need to show category id: so converting back to base object;
         ProductModel productModelObject = convertProductToProductModel(product);
-        logger.info("ending : addProduct service");
+        logger.info("ending ProductService:addProduct service");
         return productModelObject;
     }
 
     public List<ProductModel> getAllProductObjects() {
-        logger.info("starting the : getAllProductObjects service");
+        logger.info("starting the ProductService:getAllProductObjects service");
         List<Product> productList = productRepository.findAll();
         List<ProductModel> productModelList = new ArrayList<>();
         for (Product product : productList) {
             ProductModel productModel = convertProductToProductModel(product);
             productModelList.add(productModel);
         }
-        logger.info("ending : geAllProductObjects service");
+        logger.info("ending ProductService:geAllProductObjects service");
         return productModelList;
     }
 
     public ProductModel updateProductObject(ProductModel productModel, int id) {
-        logger.info("starting the : updateProductObject service");
+        logger.info("starting the ProductService:updateProductObject service");
         Product product = productRepository.findById(id).get();
         //throw an exception if product is empty
         if(product.getId() == 0 || product.getProductName() == null){
@@ -94,13 +94,13 @@ public class ProductService {
         product.setImageURL(productModel.getImageURL());
         productRepository.save(product);
         ProductModel productModelObj = convertProductToProductModel(product);
-        logger.info("ending the : updateProductObject service");
+        logger.info("ending the ProductService:updateProductObject service");
         return productModelObj;
 
     }
 
     public ProductModel deleteProductObject(int id) {
-        logger.info("starting the : deleteProductObject service");
+        logger.info("starting the ProductService:deleteProductObject service");
         Product product = productRepository.findById(id).get();
         //if product doesn't exist , throw an error
         if(product.getId() == 0 || product.getProductName() == null){
@@ -109,14 +109,14 @@ public class ProductService {
         }
         ProductModel productModel = convertProductToProductModel(product);
         productRepository.deleteById(id);
-        logger.info("ending the : deleteProductObject service");
+        logger.info("ending the ProductService:deleteProductObject service");
         return productModel;
     }
 
     public void deleteAllProductObjects() {
-        logger.info("starting the : deleteAllProductObjects service");
+        logger.info("starting the ProductService:deleteAllProductObjects service");
         productRepository.deleteAll();
-        logger.info("ending the : deleteAllProductObject service");
+        logger.info("ending the ProductService:deleteAllProductObject service");
     }
 
 

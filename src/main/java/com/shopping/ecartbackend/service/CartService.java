@@ -39,7 +39,7 @@ public class CartService {
 
     public Cart addCart(CartModel cartModel){
         //get product by id
-        logger.info("starting the : addCart service");
+        logger.info("starting the CartService:addCart service");
         if(cartModel.getProductId() == 0 || cartModel.getQuantity() == 0){
             throw new EmptyInputException("input fields are empty ", HttpStatus.BAD_REQUEST);
         }
@@ -60,25 +60,25 @@ public class CartService {
         cart.setCreatedDate(new Date());
 //        cart.setUser(user);
         cartRepository.save(cart);
-        logger.info("ending the : addCart service");
+        logger.info("ending the CartService:addCart service");
         //CartModel cartModelObject = convertCartToModel(cart);
         return  cart;
     }
 
     public Cart getCartById(int cartId){
-        logger.info("starting the : getCartById service");
+        logger.info("starting the CartService:getCartById service");
         Cart cart = cartRepository.findById(cartId).get();
         //throw an exception if the cart is empty
         if(cart == null){
             logger.log(Level.WARNING, "no cart record found for given id ");
             throw new CartNotFoundException(cartId);
         }
-        logger.info("ending the : getCartById service");
+        logger.info("ending the CartService:getCartById service");
         return cart;
     }
 
     public Cart updateCartObject(int id, CartModel cartModel) {
-        logger.info("starting the  : updateCart Service");
+        logger.info("starting the  CartService:updateCart Service");
         Cart cart = cartRepository.findById(id).get();
         Product product  = productService.findById(cart.getProduct().getId());
 //        User user = userService.getUserById(cartModel.getUserId());
@@ -95,26 +95,26 @@ public class CartService {
         cart.setQuantity(cartModel.getQuantity());
 //        cart.setUser(user);
         cartRepository.save(cart);
-        logger.info("ending the : updateCartObject");
+        logger.info("ending the CartService:updateCartObject");
         return  cart;
         //if cart
     }
 
     public void deleteCart(int id) {
-        logger.info("starting the  : deleteCartbyId Service");
+        logger.info("starting the  CartService:deleteCartbyId Service");
         Cart cart = cartRepository.findById(id).get();
         if(cart.getId() == 0 || cart.getCreatedDate() ==  null){
             logger.log(Level.WARNING, "no product record found for the cart ");
         }
         //throw an exception if not found
         cartRepository.deleteById(id);
-        logger.info("ending the  : deleteCartbyId Service");
+        logger.info("ending the  CartService:deleteCartbyId Service");
     }
 
     public void deleteAllCartObjects() {
-        logger.info("starting the  : deleteAllCart Service");
+        logger.info("starting the  CartService:deleteAllCart Service");
         cartRepository.deleteAll();
-        logger.info("ending the  : deleteAllCart Service");
+        logger.info("ending the  CartService:deleteAllCart Service");
     }
 
     private CartModel convertCartToModel(Cart cart){

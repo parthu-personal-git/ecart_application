@@ -25,7 +25,7 @@ public class CategoryService {
     private EcartExceptionHandler ecartExceptionHandler = null;
 
     public Category addCategory(CategoryModel categoryModel){
-        logger.info("starting the : addCategory service");
+        logger.info("starting the CategoryService :addCategory service");
         if(categoryModel.getCategoryName() == null || categoryModel.getImageURL() == null){
             throw new EmptyInputException("input fields are empty ", HttpStatus.BAD_REQUEST);
         }
@@ -37,19 +37,19 @@ public class CategoryService {
         category.setImageURL(categoryModel.getImageURL());
         //adding this line for testcase
         Category categoryObject = categoryRepository.save(category);
-        logger.info("ending the service : addCategory service");
+        logger.info("ending the service CategoryService:addCategory service");
         return category;
     }
 
     public Category getCategory(int categoryId){
-            logger.info("starting the : getCategory service");
+            logger.info("starting the CategoryService :getCategory service");
             Category category = categoryRepository.findById(categoryId).get();
-            logger.info("ending the service : getCategory service");
+            logger.info("ending the service CategoryService :getCategory service");
             return category;
     }
 
     public List<CategoryModel> getAllCategories(){
-        logger.info("starting the : getAllCategories service");
+        logger.info("starting the CategoryService:getAllCategories service");
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryModel> categoryModels = new ArrayList<>();
         for(Category catg : categoryList){
@@ -60,12 +60,12 @@ public class CategoryService {
             categoryModel.setImageURL(catg.getImageURL());
             categoryModels.add(categoryModel);
         }
-        logger.info("ending the service : getAllCategories service");
+        logger.info("ending the service CategoryService:getAllCategories service");
         return categoryModels;
     }
 
     public Category updateCategory(CategoryModel categoryModel,int id) {
-        logger.info("starting the : updateCategory service");
+        logger.info("starting the CategoryService:updateCategory service");
         Category category = categoryRepository.findById(id).get();
         Category categoryObj = new Category();
         categoryObj.setCategoryId(id);
@@ -73,21 +73,21 @@ public class CategoryService {
         categoryObj.setImageURL(categoryModel.getImageURL());
         categoryObj.setDescription(categoryModel.getDescription());
         categoryRepository.save(categoryObj);
-        logger.info("ending the service : updateCategory service");
+        logger.info("ending the service CategoryService:updateCategory service");
         return  categoryObj;
     }
 
     public void deleteCategory(int id) {
-        logger.info("starting the : deleteCategory service");
+        logger.info("starting the CategoryService:deleteCategory service");
         Category category = categoryRepository.findById(id).get();
         categoryRepository.deleteById(id);
-        logger.info("ending the service : deleteCategory service");
+        logger.info("ending the service CategoryService:deleteCategory service");
     }
 
     public void deleteAllCategory() {
-        logger.info("starting the : deleteAllCategory service");
+        logger.info("starting the CategoryService:deleteAllCategory service");
         categoryRepository.deleteAll();
-        logger.info("ending the service : deleteAllCategory service");
+        logger.info("ending the service CategoryService:deleteAllCategory service");
     }
 
 }
